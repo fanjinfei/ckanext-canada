@@ -404,6 +404,17 @@ def main():
 
     for filename in files:
         refs, extras = read_xml(filename)
+        to_remove = {}
+        to_add = {}
+        for k,v in refs.iteritems():
+            ks, vs = k.split('|'), v.split('|')
+            if len(ks) == 2 and len(vs) ==2:
+                to_remove[k] = True
+                for i in range(0,2):
+                    to_add[ks[i].strip()] = vs[i].strip()
+        for k,v in to_remove.iteritems():
+            refs.pop(k)
+        refs.update(to_add)
         convert(refs, os.path.basename(filename))
 
 if __name__=='__main__':
